@@ -11,12 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.1141" />
-    <PackageReference Include="Xamarin.Forms.Maps" Version="4.6.0.1141" />
+    <None Remove="client-cert.pem" />
+    <None Remove="client-key.pem" />
+    <None Remove="data\client-cert.pem" />
+    <None Remove="data\client-key.pem" />
+    <None Remove="data\server-ca.pem" />
+    <None Remove="server-ca.pem" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="logika\" />
+    <PackageReference Include="MySqlConnector" Version="1.0.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.1141" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.6.0.1141" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,5 +38,9 @@
     <EmbeddedResource Update="UX\Souboj.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="data\" />
   </ItemGroup>
 </Project>
