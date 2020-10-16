@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Bakalarka.role
 {
-    class Tezar : Hrac
+    class Tezar 
     {
     }
 }

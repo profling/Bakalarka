@@ -11,11 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="data\**" />
+    <EmbeddedResource Remove="data\**" />
+    <None Remove="data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="client-cert.pem" />
     <None Remove="client-key.pem" />
-    <None Remove="data\client-cert.pem" />
-    <None Remove="data\client-key.pem" />
-    <None Remove="data\server-ca.pem" />
     <None Remove="server-ca.pem" />
   </ItemGroup>
 
@@ -38,9 +41,5 @@
     <EmbeddedResource Update="UX\Souboj.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="data\" />
   </ItemGroup>
 </Project>

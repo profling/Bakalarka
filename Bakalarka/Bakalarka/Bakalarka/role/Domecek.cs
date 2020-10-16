@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Bakalarka.role
 {
-    class Domecek : Hrac
+     class Domecek
     {
     }
 }
