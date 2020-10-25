@@ -8,14 +8,16 @@ namespace Bakalarka.role
 {
     static class Hrac
     {
-        static int iduzivatele;
-        static String jmeno;
-        static int role;
-        static int tym;
-        static int inventar;
-        static Boolean prihlaseny = false;
+        static public int iduzivatele;
+        public static String jmeno;
+        public static int role;
+        public static int tym;
+        public static int inventar;
+        public static Boolean prihlaseny = false;
 
-
+        /*
+         * prihlaseni hrace do aplikace
+         */
         static public String Prihlaseni(int id, String heslo)
         {
             MySqlCommand prikaz = new MySqlCommand("SELECT * FROM bakalarka.uzivatel WHERE heslo=@heslo and iduzivatel=@id; ");
@@ -24,25 +26,43 @@ namespace Bakalarka.role
             MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikaz);
             if (data.HasRows)
             {
-               
+
                 while (data.Read())
                 {
                     iduzivatele = (int)data["iduzivatel"];
                     jmeno = data["iduzivatel"].ToString();
                     role = (int)data["role"];
-                   // tym = (int)data["tym"];
+                    tym = (int)data["tym"];
                     prihlaseny = true;
                 }
-                return "prihlaseni probehlo v poradku";
+                return null;
             }
             else
             {
-                return "spatne prihlasovaci udaje";
+                return "Neco se nepovedlo pri prihlaseni";
 
             }
-            return null;
+            
         }
 
+       /* vlozeni hrace do databaze
+        */
+        static public String Vytvoreni(int id, int rolep, int tymp, String heslo)
+        {
+            MySqlCommand prikaz = new MySqlCommand("INSERT INTO `bakalarka`.`uzivatel` (`iduzivatel`, `role`, `tym`, `heslo`) VALUES (@id,@role,@tym,@heslo);");
+            prikaz.Parameters.AddWithValue("@id", id);
+            prikaz.Parameters.AddWithValue("@role",rolep);
+            prikaz.Parameters.AddWithValue("@tym", tymp);
+            prikaz.Parameters.AddWithValue("@heslo", heslo);
+            String prubeh = DBConnector.ProvedeniPrikazuOstatni(prikaz);
+            if (prubeh == null)
+            {
+                return null;
+            }
+            else
+            {
+                return prubeh;
+            }        }
 
     }
 }

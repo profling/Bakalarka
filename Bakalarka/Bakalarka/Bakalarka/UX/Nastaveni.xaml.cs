@@ -1,10 +1,11 @@
-﻿using Bakalarka.role;
+﻿using Bakalarka.logika;
+using Bakalarka.role;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using MySqlConnector;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,8 +28,25 @@ namespace Bakalarka.UX
             layout.Children.Add(label);
 
             prihlasit.Clicked += async (sender, args) => {
-                label.Text = Hrac.Prihlaseni(Convert.ToInt32(id.Text), heslo.Text);
-                PrihlaseniVedouciho();
+                if (Hrac.Prihlaseni(Convert.ToInt32(id.Text), heslo.Text) == null)
+                {
+                    if (Hrac.role==0)
+                    {
+                        PrihlaseniVedouciho();
+                    }
+                    else
+                    {
+                        PrihlaseniHrac();
+
+
+                    }
+                   
+                }
+                else
+                {
+                    label.Text="Spatne prihlasovaci udaje";
+                }
+               
             };
             this.Content = layout;
         }
@@ -207,101 +225,132 @@ namespace Bakalarka.UX
             };
 
             //umisteni prvku
-            Grid.SetRow(novaHra, 0);
-            Grid.SetColumnSpan(novaHra, 9);
-            vedouci.Children.Add(novaHra);
+            {
+
+                Grid.SetRow(novaHra, 0);
+                Grid.SetColumnSpan(novaHra, 9);
+                vedouci.Children.Add(novaHra);
+
+                Grid.SetRow(pocetTymu, 1);
+                Grid.SetColumn(pocetTymu, 0);
+                Grid.SetColumnSpan(pocetTymu, 3);
+                vedouci.Children.Add(pocetTymu);
+
+                Grid.SetRow(entryPocetTymu, 1);
+                Grid.SetColumn(entryPocetTymu, 3);
+                Grid.SetColumnSpan(entryPocetTymu, 3);
+                vedouci.Children.Add(entryPocetTymu);
+
+                Grid.SetRow(pocetClenu, 2);
+                Grid.SetColumn(pocetClenu, 0);
+                Grid.SetColumnSpan(pocetClenu, 3);
+                vedouci.Children.Add(pocetClenu);
+
+                Grid.SetRow(entryPocetClenu, 2);
+                Grid.SetColumn(entryPocetClenu, 3);
+                Grid.SetColumnSpan(entryPocetClenu, 3);
+                vedouci.Children.Add(entryPocetClenu);
+
+                Grid.SetRow(roh1, 3);
+                Grid.SetColumn(roh1, 0);
+                Grid.SetColumnSpan(roh1, 2);
+                vedouci.Children.Add(roh1);
+                Grid.SetRow(roh1X, 3);
+                Grid.SetColumn(roh1X, 2);
+                Grid.SetColumnSpan(roh1X, 3);
+                vedouci.Children.Add(roh1X);
+                Grid.SetRow(roh1Lomitko, 3);
+                Grid.SetColumn(roh1Lomitko, 5);
+                vedouci.Children.Add(roh1Lomitko);
+                Grid.SetRow(roh1Y, 3);
+                Grid.SetColumn(roh1Y, 6);
+                Grid.SetColumnSpan(roh1Y, 3);
+                vedouci.Children.Add(roh1Y);
+
+                Grid.SetRow(roh2, 4);
+                Grid.SetColumn(roh2, 0);
+                Grid.SetColumnSpan(roh2, 2);
+                vedouci.Children.Add(roh2);
+                Grid.SetRow(roh2X, 4);
+                Grid.SetColumn(roh2X, 2);
+                Grid.SetColumnSpan(roh2X, 3);
+                vedouci.Children.Add(roh2X);
+                Grid.SetRow(roh2Lomitko, 4);
+                Grid.SetColumn(roh2Lomitko, 5);
+                vedouci.Children.Add(roh2Lomitko);
+                Grid.SetRow(roh2Y, 4);
+                Grid.SetColumn(roh2Y, 6);
+                Grid.SetColumnSpan(roh2Y, 3);
+                vedouci.Children.Add(roh2Y);
+
+                Grid.SetRow(roh3, 5);
+                Grid.SetColumn(roh3, 0);
+                Grid.SetColumnSpan(roh3, 2);
+                vedouci.Children.Add(roh3);
+                Grid.SetRow(roh3X, 5);
+                Grid.SetColumn(roh3X, 2);
+                Grid.SetColumnSpan(roh3X, 3);
+                vedouci.Children.Add(roh3X);
+                Grid.SetRow(roh3Lomitko, 5);
+                Grid.SetColumn(roh3Lomitko, 5);
+                vedouci.Children.Add(roh3Lomitko);
+                Grid.SetRow(roh3Y, 5);
+                Grid.SetColumn(roh3Y, 6);
+                Grid.SetColumnSpan(roh3Y, 3);
+                vedouci.Children.Add(roh3Y);
+
+                Grid.SetRow(roh4, 6);
+                Grid.SetColumn(roh4, 0);
+                Grid.SetColumnSpan(roh4, 2);
+                vedouci.Children.Add(roh4);
+                Grid.SetRow(roh4X, 6);
+                Grid.SetColumn(roh4X, 2);
+                Grid.SetColumnSpan(roh4X, 3);
+                vedouci.Children.Add(roh4X);
+                Grid.SetRow(roh4Lomitko, 6);
+                Grid.SetColumn(roh4Lomitko, 5);
+                vedouci.Children.Add(roh4Lomitko);
+                Grid.SetRow(roh4Y, 6);
+                Grid.SetColumn(roh4Y, 6);
+                Grid.SetColumnSpan(roh4Y, 3);
+                vedouci.Children.Add(roh4Y);
+
+                Grid.SetRow(zalozit, 7);
+                Grid.SetColumn(zalozit, 0);
+                Grid.SetColumnSpan(zalozit, 9);
+                vedouci.Children.Add(zalozit);
+                Content = vedouci;
+            }
+            zalozit.Clicked += async (sender, args) =>
+            {
+                String prubeh =  Hra.novaHra(roh1X.Text,roh1Y.Text, roh2X.Text, roh2Y.Text, roh3X.Text, roh3Y.Text, roh4X.Text, roh4Y.Text, Hrac.iduzivatele, Convert.ToInt32(entryPocetTymu.Text), Convert.ToInt32(entryPocetClenu.Text), "TestikFinal");
+                if (prubeh != null)
+                {
+                    var layout = new StackLayout { Padding = new Thickness(5, 10) };
+                    Label chyba = new Label { Text = prubeh };
+                    layout.Children.Add(chyba);
+                    Content = layout;
+                }           
             
-            Grid.SetRow(pocetTymu, 1);
-            Grid.SetColumn(pocetTymu, 0);
-            Grid.SetColumnSpan(pocetTymu, 3);
-            vedouci.Children.Add(pocetTymu);
-            
-            Grid.SetRow(entryPocetTymu, 1);
-            Grid.SetColumn(entryPocetTymu, 3);
-            Grid.SetColumnSpan(entryPocetTymu, 3);
-            vedouci.Children.Add(entryPocetTymu);
-            
-            Grid.SetRow(pocetClenu, 2);
-            Grid.SetColumn(pocetClenu, 0);
-            Grid.SetColumnSpan(pocetClenu, 3);
-            vedouci.Children.Add(pocetClenu);
-            
-            Grid.SetRow(entryPocetClenu, 2);
-            Grid.SetColumn(entryPocetClenu, 3);
-            Grid.SetColumnSpan(entryPocetClenu, 3);
-            vedouci.Children.Add(entryPocetClenu);
+            };
+        }
 
-            Grid.SetRow(roh1, 3);
-            Grid.SetColumn(roh1, 0);
-            Grid.SetColumnSpan(roh1, 2);
-            vedouci.Children.Add(roh1);
-            Grid.SetRow(roh1X, 3);
-            Grid.SetColumn(roh1X, 2);
-            Grid.SetColumnSpan(roh1X, 3);
-            vedouci.Children.Add(roh1X);
-            Grid.SetRow(roh1Lomitko, 3);
-            Grid.SetColumn(roh1Lomitko, 5);
-            vedouci.Children.Add(roh1Lomitko);
-            Grid.SetRow(roh1Y, 3);
-            Grid.SetColumn(roh1Y, 6);
-            Grid.SetColumnSpan(roh1Y, 3);
-            vedouci.Children.Add(roh1Y);
-
-            Grid.SetRow(roh2, 4);
-            Grid.SetColumn(roh2, 0);
-            Grid.SetColumnSpan(roh2, 2);
-            vedouci.Children.Add(roh2);
-            Grid.SetRow(roh2X, 4);
-            Grid.SetColumn(roh2X, 2);
-            Grid.SetColumnSpan(roh2X, 3);
-            vedouci.Children.Add(roh2X);
-            Grid.SetRow(roh2Lomitko, 4);
-            Grid.SetColumn(roh2Lomitko, 5);
-            vedouci.Children.Add(roh2Lomitko);
-            Grid.SetRow(roh2Y, 4);
-            Grid.SetColumn(roh2Y, 6);
-            Grid.SetColumnSpan(roh2Y, 3);
-            vedouci.Children.Add(roh2Y);
-
-            Grid.SetRow(roh3, 5);
-            Grid.SetColumn(roh3, 0);
-            Grid.SetColumnSpan(roh3, 2);
-            vedouci.Children.Add(roh3);
-            Grid.SetRow(roh3X, 5);
-            Grid.SetColumn(roh3X, 2);
-            Grid.SetColumnSpan(roh3X, 3);
-            vedouci.Children.Add(roh3X);
-            Grid.SetRow(roh3Lomitko, 5);
-            Grid.SetColumn(roh3Lomitko, 5);
-            vedouci.Children.Add(roh3Lomitko);
-            Grid.SetRow(roh3Y, 5);
-            Grid.SetColumn(roh3Y, 6);
-            Grid.SetColumnSpan(roh3Y, 3);
-            vedouci.Children.Add(roh3Y);
-
-            Grid.SetRow(roh4, 6);
-            Grid.SetColumn(roh4, 0);
-            Grid.SetColumnSpan(roh4, 2);
-            vedouci.Children.Add(roh4);
-            Grid.SetRow(roh4X, 6);
-            Grid.SetColumn(roh4X, 2);
-            Grid.SetColumnSpan(roh4X, 3);
-            vedouci.Children.Add(roh4X);
-            Grid.SetRow(roh4Lomitko, 6);
-            Grid.SetColumn(roh4Lomitko, 5);
-            vedouci.Children.Add(roh4Lomitko);
-            Grid.SetRow(roh4Y, 6);
-            Grid.SetColumn(roh4Y, 6);
-            Grid.SetColumnSpan(roh4Y, 3);
-            vedouci.Children.Add(roh4Y);
-
-            Grid.SetRow(zalozit, 7);
-            Grid.SetColumn(zalozit, 0);
-            Grid.SetColumnSpan(zalozit, 9);
-            vedouci.Children.Add(zalozit);
-            Content = vedouci;
-
-
+        public void PrihlaseniHrac()
+        {
+            //nacteni hry
+            MySqlCommand prikaz = new MySqlCommand("Select hra from bakalarka.tym where idtym=@id;");
+            prikaz.Parameters.AddWithValue("@id", Hrac.tym);
+            MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikaz);
+            int idhry = 0;
+            while (data.Read())
+            {
+                idhry = (int)data["hra"];
+            }
+            Hra.nacteniHry(idhry);
+            var layout = new StackLayout { Padding = new Thickness(5, 10) };
+            Label label = new Label { Text=Hra.nazev };
+            layout.Children.Add(label);
+            Content = layout;
         }
     }
 }

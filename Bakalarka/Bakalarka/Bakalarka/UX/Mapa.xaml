@@ -5,8 +5,6 @@
              x:Class="Bakalarka.UX.Mapa"
              Title="Mapa">
     <ContentPage.Content>
-        <Grid>
-            <map:Map></map:Map>
-        </Grid>
+       
     </ContentPage.Content>
 </ContentPage>

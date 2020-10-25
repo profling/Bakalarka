@@ -19,7 +19,7 @@ namespace Bakalarka.logika
    
             
         /**
-         * Provedeni prikazu update, delete, insert. Pokud probehne v poradku vrati data jinak vrati null
+         * Provedeni prikazu Select. Pokud probehne v poradku vrati data jinak vrati null
          */
         
        static public MySqlDataReader ProvedeniPrikazuSelect(MySqlCommand prikaz)
