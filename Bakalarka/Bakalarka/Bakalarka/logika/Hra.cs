@@ -5,13 +5,19 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using MySqlConnector;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace Bakalarka.logika
 {
     static class Hra
     {
-        public static String roh1X, roh1Y, roh2X, roh2Y, roh3X, roh3Y, roh4X, roh4Y,nazev;
-        static int tymu, hracu, idhry;
+        public static String nazev;
+        public static int tymu, hracu, idhry;
+        public static double roh1X, roh1Y, roh2X, roh2Y, roh3X, roh3Y, roh4X, roh4Y;
+        public static List<Produkt> produkty;
+        public static int vybranyProdukt;
+        public static Label produktPopis;
+        public static Map mapa;
 
 
         /*
@@ -140,17 +146,31 @@ namespace Bakalarka.logika
             {
                 while (data.Read())
                 {
-                    roh1X = (String)data["roh1X"];
-                    roh1Y = (String)data["roh1Y"];
-                    roh2X = (String)data["roh2X"];
-                    roh2Y = (String)data["roh2Y"];
-                    roh3X = (String)data["roh3X"];
-                    roh3Y = (String)data["roh3Y"];
-                    roh4X = (String)data["roh4X"];
-                    roh4Y = (String)data["roh4Y"];
+                    roh1X = Double.Parse(data["roh1X"].ToString(),System.Globalization.CultureInfo.InvariantCulture);
+                    roh1Y = Double.Parse(data["roh1Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                    roh2X = Double.Parse(data["roh2X"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                    roh2Y = Double.Parse(data["roh2Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                    roh3X = Double.Parse(data["roh3X"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                    roh3Y = Double.Parse(data["roh3Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                    roh4X = Double.Parse(data["roh4X"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
+                    roh4Y = Double.Parse(data["roh4Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
                     nazev = (String)data["nazev"];
 
                 }
+
+                //nacteni produktu
+                MySqlCommand prikazpr = new MySqlCommand("Select * from bakalarka.produkt");
+                MySqlDataReader datapr = DBConnector.ProvedeniPrikazuSelect(prikazpr);
+                Hra.produkty = new List<Produkt>();
+                while (datapr.Read())
+                {
+                    produkty.Add(new Produkt((int)datapr["idprodukt"], (String)datapr["nazev"], (String)datapr["popis"], (double)datapr["X"], (double)datapr["Y"], (double)datapr["X2"], (double)datapr["Y2"]));
+                }
+
+                //nacteni mapy 
+                MapaKontroler.nacteniProduktu();
+                MapaKontroler.HerniPole();
+               
                 return null;
             }
             else
@@ -160,7 +180,9 @@ namespace Bakalarka.logika
 
             return null;
         }
-        
+        /*
+         * ziskani idhry
+         */
         static public String idHry(String nazev)
         {
             MySqlCommand prikazidhry = new MySqlCommand("SELECT idhra FROM `bakalarka`.`hra` WHERE `nazev`=@nazev; ");

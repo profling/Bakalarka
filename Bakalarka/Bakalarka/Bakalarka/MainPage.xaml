@@ -4,9 +4,9 @@
              x:Class="Bakalarka.MainPage"
              xmlns:pages="clr-namespace:Bakalarka.UX">
 
-    <pages:Mapa/>
+    <!--  <pages:Mapa/>
     <pages:Souboj/>
     <pages:Hierarchie/>
-    <pages:Nastaveni/>
+    <pages:Nastaveni/> -->
 
 </TabbedPage>

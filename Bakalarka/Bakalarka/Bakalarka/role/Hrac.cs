@@ -12,8 +12,10 @@ namespace Bakalarka.role
         public static String jmeno;
         public static int role;
         public static int tym;
-        public static int inventar;
+        public static int inventar=0;
+        public static Boolean zivy = true;
         public static Boolean prihlaseny = false;
+        
 
         /*
          * prihlaseni hrace do aplikace
@@ -33,6 +35,7 @@ namespace Bakalarka.role
                     jmeno = data["iduzivatel"].ToString();
                     role = (int)data["role"];
                     tym = (int)data["tym"];
+                   if(!Convert.IsDBNull(data["inventar"]))inventar = (int)data["inventar"];
                     prihlaseny = true;
                 }
                 return null;
@@ -64,5 +67,26 @@ namespace Bakalarka.role
                 return prubeh;
             }        }
 
+        /*
+         * vlozeni produktu do inventare
+         */
+        static public String VlozeniDoInventare(int idProduktu)
+        {
+            if (inventar!=0)
+            {
+                return "Inventar uz je plny";
+            }
+            MySqlCommand prikazvlozit = new MySqlCommand("Update bakalarka.uzivatel set inventar=@idprodukt where iduzivatel=@iduzivatel");
+            prikazvlozit.Parameters.AddWithValue("@idprodukt", idProduktu);
+            prikazvlozit.Parameters.AddWithValue("@iduzivatel", iduzivatele);
+            String prubeh = DBConnector.ProvedeniPrikazuOstatni(prikazvlozit);
+            if (prubeh != null)
+            {
+                return "neco se nepovedlo pri vkladani produktu" + prubeh;
+            }
+            inventar = idProduktu;
+            return null;
+        }
     }
+
 }

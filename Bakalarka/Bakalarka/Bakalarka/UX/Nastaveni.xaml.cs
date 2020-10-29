@@ -19,7 +19,7 @@ namespace Bakalarka.UX
             InitializeComponent();
             var layout = new StackLayout { Padding = new Thickness(5, 10) };
             var id = new Entry { Keyboard = Keyboard.Numeric };
-            var heslo = new Entry { IsPassword= true };
+            var heslo = new Entry { IsPassword= true, Keyboard = Keyboard.Numeric };
             var prihlasit = new Button { Text = "Prihlasit se" };
             var label = new Label { Text = "Stav" };
             layout.Children.Add(id);
@@ -30,7 +30,7 @@ namespace Bakalarka.UX
             prihlasit.Clicked += async (sender, args) => {
                 if (Hrac.Prihlaseni(Convert.ToInt32(id.Text), heslo.Text) == null)
                 {
-                    if (Hrac.role==0)
+                    if (Hrac.role == 0)
                     {
                         PrihlaseniVedouciho();
                     }
@@ -40,7 +40,7 @@ namespace Bakalarka.UX
 
 
                     }
-                   
+
                 }
                 else
                 {
@@ -323,7 +323,7 @@ namespace Bakalarka.UX
             }
             zalozit.Clicked += async (sender, args) =>
             {
-                String prubeh =  Hra.novaHra(roh1X.Text,roh1Y.Text, roh2X.Text, roh2Y.Text, roh3X.Text, roh3Y.Text, roh4X.Text, roh4Y.Text, Hrac.iduzivatele, Convert.ToInt32(entryPocetTymu.Text), Convert.ToInt32(entryPocetClenu.Text), "TestikFinal");
+                String prubeh =  Hra.novaHra(roh1X.Text,roh1Y.Text, roh2X.Text, roh2Y.Text, roh3X.Text, roh3Y.Text, roh4X.Text, roh4Y.Text, Hrac.iduzivatele, Convert.ToInt32(entryPocetTymu.Text), Convert.ToInt32(entryPocetClenu.Text), "Testikbuuh");
                 if (prubeh != null)
                 {
                     var layout = new StackLayout { Padding = new Thickness(5, 10) };
