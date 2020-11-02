@@ -12,20 +12,24 @@ namespace Bakalarka.logika
 {
     class Produkt
     {
-        String nazev;
-        String popis;
+       public String nazev;
+       public String popis;
         public int id;
          public Pin jedna;
          public Pin dva;
         public int ulozene;
+        public int uroven;
         
         
 
-        public Produkt(int id, String nazev, String popis, double x, double y, double x2, double y2)
+        public Produkt(int id, String nazev, String popis, double x, double y, double x2, double y2, int uroven)
         {
             
             this.nazev = nazev;
             this.popis = popis;
+            this.uroven = uroven;
+            this.id = id;
+
             jedna = new Pin
             {
                 Position = new Position(x, y),

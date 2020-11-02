@@ -15,16 +15,20 @@ namespace Bakalarka
         public Hierarchie hie;
         public Souboj souboj;
         public Nastaveni nastaveni;
+        public Skladiste skladiste;
         public MainPage()
         {
             mapa = new Mapa();
             hie = new Hierarchie();
             souboj = new Souboj();
             nastaveni = new Nastaveni();
+            skladiste = new Skladiste();
+            
             Children.Add(mapa);
             Children.Add(hie);
             Children.Add(souboj);
             Children.Add(nastaveni);
+            Children.Add(skladiste);
             InitializeComponent();
             
         }

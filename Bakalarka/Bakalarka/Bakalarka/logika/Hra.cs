@@ -18,7 +18,7 @@ namespace Bakalarka.logika
         public static int vybranyProdukt;
         public static Label produktPopis;
         public static Map mapa;
-
+        public static Grid skladiste;
 
         /*
          * Metoda nova hra slouzi k vytvoreni nove hre. ukaze mapu a vygeneruje hrace a tymy
@@ -164,12 +164,13 @@ namespace Bakalarka.logika
                 Hra.produkty = new List<Produkt>();
                 while (datapr.Read())
                 {
-                    produkty.Add(new Produkt((int)datapr["idprodukt"], (String)datapr["nazev"], (String)datapr["popis"], (double)datapr["X"], (double)datapr["Y"], (double)datapr["X2"], (double)datapr["Y2"]));
+                    produkty.Add(new Produkt((int)datapr["idprodukt"], (String)datapr["nazev"], (String)datapr["popis"], (double)datapr["X"], (double)datapr["Y"], (double)datapr["X2"], (double)datapr["Y2"],(int)datapr["uroven"]));
                 }
 
                 //nacteni mapy 
                 MapaKontroler.nacteniProduktu();
                 MapaKontroler.HerniPole();
+                Sklad.nacteniSkladu();
                
                 return null;
             }

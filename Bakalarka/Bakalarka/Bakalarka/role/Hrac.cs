@@ -34,7 +34,14 @@ namespace Bakalarka.role
                     iduzivatele = (int)data["iduzivatel"];
                     jmeno = data["iduzivatel"].ToString();
                     role = (int)data["role"];
-                    tym = (int)data["tym"];
+                    if (Hrac.role == 0)//vedouci nema tym
+                    {
+                        Hrac.tym = 0;
+                    }
+                    else {
+                        tym = (int)data["tym"];
+                    }
+                    
                    if(!Convert.IsDBNull(data["inventar"]))inventar = (int)data["inventar"];
                     prihlaseny = true;
                 }
