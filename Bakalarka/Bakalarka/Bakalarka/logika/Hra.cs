@@ -43,10 +43,12 @@ namespace Bakalarka.logika
                 //vygenerovani tymu a hracu
                 for (int y = 0; y < tymup; y++)
                 {
+                    var rand = new Random();
                     int idtym =0;
-                    MySqlCommand prikaztym = new MySqlCommand("INSERT INTO `bakalarka`.`tym` (`nazev`, `hra`) VALUES (@nazev,@idhry);");
+                    MySqlCommand prikaztym = new MySqlCommand("INSERT INTO `bakalarka`.`tym` (`nazev`, `hra`,uskladani) VALUES (@nazev,@idhry,@ulozeni);");
                     prikaztym.Parameters.AddWithValue("@nazev",y);
                     prikaztym.Parameters.AddWithValue("@idhry",idhry);
+                    prikaztym.Parameters.AddWithValue("@ulozeni", rand.Next(100000,999999));
                     prubeh = DBConnector.ProvedeniPrikazuOstatni(prikaztym);
                     if (prubeh == null)
                     {
@@ -66,7 +68,7 @@ namespace Bakalarka.logika
                         }
                         //vytvoreni hracu
                         
-                            var rand = new Random();
+                           
                             MySqlCommand prikazhrac = new MySqlCommand("INSERT INTO `bakalarka`.`uzivatel` (`jmeno`, `role`, `tym`, `heslo`) VALUES (@jmeno,@role,@tym,@heslo);");
                             var jmeno = new MySqlParameter("@jmeno", MySqlDbType.String);
                         prikazhrac.Parameters.Add(jmeno);

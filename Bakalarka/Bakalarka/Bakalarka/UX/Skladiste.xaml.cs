@@ -17,7 +17,13 @@ namespace Bakalarka.UX
         {
             InitializeComponent();
             Hra.skladiste = new Grid();
-            Content = Hra.skladiste;
+            ScrollView Scroll = new ScrollView
+            {
+                Orientation = ScrollOrientation.Vertical,
+            };
+
+            Scroll.Content = Hra.skladiste;
+            Content = Scroll;
 
         }
     }
