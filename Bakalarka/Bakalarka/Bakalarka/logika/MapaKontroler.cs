@@ -70,7 +70,7 @@ namespace Bakalarka.logika
         /*
          * Nacteni produktu
          */
-        static public void nacteniProduktu()
+        static public void NacteniProduktu()
         {
            
             foreach(var produkt in Hra.produkty)

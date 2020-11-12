@@ -19,6 +19,7 @@ namespace Bakalarka.logika
         public static Label produktPopis;
         public static Map mapa;
         public static Grid skladiste;
+        public static Grid bojiste;
 
         /*
          * Metoda nova hra slouzi k vytvoreni nove hre. ukaze mapu a vygeneruje hrace a tymy
@@ -170,9 +171,12 @@ namespace Bakalarka.logika
                 }
 
                 //nacteni mapy 
-                MapaKontroler.nacteniProduktu();
+                MapaKontroler.NacteniProduktu();
                 MapaKontroler.HerniPole();
-                Sklad.nacteniSkladu();
+                //nacteni skladu
+                Sklad.NacteniSkladu();
+                //nacteni souboju 
+                Bojiste.BojisteUvod();
                
                 return null;
             }

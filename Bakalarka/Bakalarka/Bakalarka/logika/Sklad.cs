@@ -16,14 +16,14 @@ namespace Bakalarka.logika
         /*
          * nacteni skladu
          */
-        public static String nacteniSkladu()
+        public static String NacteniSkladu()
         {
-            aktualizaceSkladu();
+            AktualizaceSkladu();
 
             //zobrazeni skladiste hezky do gridu
-            vytvoreniGridu();
+            VytvoreniGridu();
             //nacitani produktu
-            nacteniProduktu();
+            NacteniProduktu();
 
 
             return null;
@@ -31,7 +31,7 @@ namespace Bakalarka.logika
         /*
          * vytvoreni gridu pro skladiste
          */
-        public static void vytvoreniGridu()
+        public static void VytvoreniGridu()
         {
             for (int i = 0; i < Hra.produkty.Count() + 6; i++)
             {
@@ -43,7 +43,7 @@ namespace Bakalarka.logika
         /*
          * nacte produkty do mrizky
          */
-        public static String nacteniProduktu()
+        public static String NacteniProduktu()
         {
             int radek = 0;
             var uskladnit = new Button { Text = "Uložit do skladu" };
@@ -58,13 +58,13 @@ namespace Bakalarka.logika
                     Hra.skladiste.Children.Add(popis, 0, 2);
                     Hra.skladiste.Children.Add(vstup, 1, 2);
                     var ulozit = new Button { Text = "Uložit do skladu" };
-                    ulozit.Clicked += async (sender1, args1) =>
+                    ulozit.Clicked += async (sender1, args1) => // ulozeni button
                     {
-                        String prubeh = ulozeniDoSkladu(vstup.Text);
+                        String prubeh = UlozeniDoSkladu(vstup.Text);
                         if (prubeh == null)//kdyz probehlo ok
                         {
                             Hra.skladiste.Children.Clear();
-                            nacteniProduktu();
+                            NacteniProduktu();
                         }
                         else //kdyz neprobehl ok
                         {
@@ -78,19 +78,19 @@ namespace Bakalarka.logika
                     zpet.Clicked += async (sender1, args2) =>
                     {
                         Hra.skladiste.Children.Clear();
-                        nacteniProduktu();
+                        NacteniProduktu();
                     };
                 }
                 else// pokud neni domecek
                 {
-                    var kod = new Label { Text = vygenerovaniKodu() };
+                    var kod = new Label { Text = VygenerovaniKodu() };
                     var zpet = new Button { Text = "Zpět" };
                     Hra.skladiste.Children.Add(kod, 0, 1);
                     Hra.skladiste.Children.Add(zpet, 0, 2);
                     zpet.Clicked += async (sender1, args1) =>
                     {
                         Hra.skladiste.Children.Clear();
-                        nacteniProduktu();
+                        NacteniProduktu();
                     };
                 }
 
@@ -150,21 +150,25 @@ namespace Bakalarka.logika
                                     Grid.SetColumn(prisada3, 0);
                                     Hra.skladiste.Children.Add(prisada3);
                                 }
-                                var smenit = new Button { Text = "Směnit" };
-                                Hra.skladiste.Children.Add(smenit, 1, 4);
-                                smenit.Clicked += async (sender1, args2) =>
+                                if (Hrac.role == 3)// domecek muze smeniit
                                 {
-                                    String prubeh = receptik.Smena();
-                                    if (prubeh == null)
+                                    var smenit = new Button { Text = "Směnit" };
+                                    Hra.skladiste.Children.Add(smenit, 1, 4);
+                                    smenit.Clicked += async (sender1, args2) =>
                                     {
-                                        Hra.skladiste.Children.Clear();
-                                        nacteniProduktu();
-                                    }
-                                    else
-                                    {
-                                        infohlaska.Text = prubeh;
-                                    }
-                                };
+                                        String prubeh = receptik.Smena();
+                                        if (prubeh == null)
+                                        {
+                                            Hra.skladiste.Children.Clear();
+                                            NacteniProduktu();
+                                        }
+                                        else
+                                        {
+                                            infohlaska.Text = prubeh;
+                                        }
+                                    };
+                                }
+                                
                             }
 
                             var zpet = new Button { Text = "Zpět" };
@@ -172,7 +176,7 @@ namespace Bakalarka.logika
                             zpet.Clicked += async (sender1, args2) =>
                                 {
                                     Hra.skladiste.Children.Clear();
-                                    nacteniProduktu();
+                                    NacteniProduktu();
                                 };
 
                         };
@@ -191,7 +195,7 @@ namespace Bakalarka.logika
         /*
          * aktualizace stavu skladu
          */
-        public static String aktualizaceSkladu()
+        public static String AktualizaceSkladu()
         {
             MySqlCommand prikaz = new MySqlCommand("Select count(*) as pocet from bakalarka.sklad where idtym=@idtym and idprodukt=@idprodukt");
             prikaz.Parameters.AddWithValue("@idtym", Hrac.tym);
@@ -217,7 +221,7 @@ namespace Bakalarka.logika
         /*
          * ulozeni produktu od hrace do skladu pro domecek 
          */
-        public static String ulozeniDoSkladu(String kod)
+        public static String UlozeniDoSkladu(String kod)
         {
             MySqlCommand prikazuskladneni = new MySqlCommand("Select uskladani from bakalarka.tym where idtym=@idtym;");
             prikazuskladneni.Parameters.AddWithValue("@idtym", Hrac.tym);
@@ -257,7 +261,7 @@ namespace Bakalarka.logika
         /*
          * vygenerovani kodu pro hrace, ktery predaji domeck
          */
-        public static String vygenerovaniKodu()
+        public static String VygenerovaniKodu()
         {
             if (Hrac.inventar == 0)
             {
