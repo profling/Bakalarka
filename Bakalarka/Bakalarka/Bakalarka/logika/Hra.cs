@@ -12,11 +12,12 @@ namespace Bakalarka.logika
     static class Hra
     {
         public static String nazev;
-        public static int tymu, hracu, idhry;
+        public static int  idhry;
         public static double roh1X, roh1Y, roh2X, roh2Y, roh3X, roh3Y, roh4X, roh4Y;
         public static List<Produkt> produkty;
         public static int vybranyProdukt;
-        public static Label produktPopis;
+        public static Label produktPopis, invObsah, stavZivotu;
+
         public static Map mapa;
         public static Grid skladiste;
         public static Grid bojiste;
@@ -46,10 +47,11 @@ namespace Bakalarka.logika
                 {
                     var rand = new Random();
                     int idtym =0;
-                    MySqlCommand prikaztym = new MySqlCommand("INSERT INTO `bakalarka`.`tym` (`nazev`, `hra`,uskladani) VALUES (@nazev,@idhry,@ulozeni);");
+                    MySqlCommand prikaztym = new MySqlCommand("INSERT INTO `bakalarka`.`tym` (`nazev`, `hra`,uskladani,oziveni) VALUES (@nazev,@idhry,@ulozeni,@oziveni);");
                     prikaztym.Parameters.AddWithValue("@nazev",y);
                     prikaztym.Parameters.AddWithValue("@idhry",idhry);
                     prikaztym.Parameters.AddWithValue("@ulozeni", rand.Next(100000,999999));
+                    prikaztym.Parameters.AddWithValue("@oziveni", rand.Next(100000, 999999));
                     prubeh = DBConnector.ProvedeniPrikazuOstatni(prikaztym);
                     if (prubeh == null)
                     {
@@ -70,7 +72,7 @@ namespace Bakalarka.logika
                         //vytvoreni hracu
                         
                            
-                            MySqlCommand prikazhrac = new MySqlCommand("INSERT INTO `bakalarka`.`uzivatel` (`jmeno`, `role`, `tym`, `heslo`) VALUES (@jmeno,@role,@tym,@heslo);");
+                            MySqlCommand prikazhrac = new MySqlCommand("INSERT INTO `bakalarka`.`uzivatel` (`jmeno`, `role`, `tym`, `heslo`,zivot, pocetUlozeni) VALUES (@jmeno,@role,@tym,@heslo,1, 0);");
                             var jmeno = new MySqlParameter("@jmeno", MySqlDbType.String);
                         prikazhrac.Parameters.Add(jmeno);
                         prikazhrac.Parameters.AddWithValue("@tym",idtym);
@@ -142,9 +144,11 @@ namespace Bakalarka.logika
          */
         static public String nacteniHry(int idhry)
         {
+          
             MySqlCommand prikaz = new MySqlCommand("Select * from bakalarka.hra where idhra=@idhra");
             prikaz.Parameters.AddWithValue("@idhra", idhry);
             MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikaz);
+            
             if (data.HasRows)
             {
                 while (data.Read())

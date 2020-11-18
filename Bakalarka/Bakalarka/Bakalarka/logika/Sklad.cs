@@ -241,7 +241,7 @@ namespace Bakalarka.logika
             }
             if (inv == Convert.ToInt32(parser[0]))
             {
-                MySqlCommand prikazFinal = new MySqlCommand("Update bakalarka.uzivatel set inventar=null where iduzivatel=@iduzivatel;" +
+                MySqlCommand prikazFinal = new MySqlCommand("Update bakalarka.uzivatel set inventar=null, pocetUlozeni=pocetUlozeni+1 where iduzivatel=@iduzivatel;" +
                     "Update bakalarka.tym set uskladani=@uskladani where idtym=@idtym;" +
                     "INSERT INTO `bakalarka`.`sklad` (`idprodukt`, `idtym`) VALUES (@idprodukt, @idtym);");
                 prikazFinal.Parameters.AddWithValue("@iduzivatel", parser[1]);
@@ -250,6 +250,8 @@ namespace Bakalarka.logika
                 prikazFinal.Parameters.AddWithValue("@uskladani", new Random().Next(100000, 999999));
                 DBConnector.ProvedeniPrikazuOstatni(prikazFinal);
                 Hra.produkty.Find(item => item.id == Convert.ToInt32(parser[0])).ulozene++;
+                Hrac.inventar = 0;
+                Hrac.inventarNazev = "";
                 return null;
             }
             else
@@ -273,7 +275,7 @@ namespace Bakalarka.logika
                 prikaz.Parameters.AddWithValue("@idtym", Hrac.tym);
                 MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikaz);
                 data.Read();
-                return Hrac.inventar.ToString() + Convert.ToString((int)data["uskladani"]) + Hrac.iduzivatele.ToString();
+                return Hrac.inventar.ToString() + Convert.ToString((int)data["uskladani"]) + Hrac.iduzivatel.ToString();
             }
 
         }

@@ -12,22 +12,18 @@ namespace Bakalarka
     public partial class MainPage :TabbedPage
     {
         public Mapa mapa;
-        public Hierarchie hie;
         public Souboj souboj;
-        public Nastaveni nastaveni;
+        public MujProfil mujprofil;
         public Skladiste skladiste;
         public MainPage()
         {
             mapa = new Mapa();
-            hie = new Hierarchie();
             souboj = new Souboj();
-            nastaveni = new Nastaveni();
+            mujprofil = new MujProfil();
             skladiste = new Skladiste();
-            
+            Children.Add(mujprofil);
             Children.Add(mapa);
-            Children.Add(hie);
             Children.Add(souboj);
-            Children.Add(nastaveni);
             Children.Add(skladiste);
             InitializeComponent();
             
