@@ -21,7 +21,9 @@ namespace Bakalarka.logika
         public int uroven;
         
         
-
+        /*
+         * Vztvoreni produktu prvni urovne, kdy se vztvari i piny pro mapku
+         */
         public Produkt(int id, String nazev, String popis, double x, double y, double x2, double y2, int uroven)
         {
             
@@ -57,6 +59,21 @@ namespace Bakalarka.logika
 
             };
         }
+        /*
+         * Vytvoreni ostatnich produktu, kde neni potreba pinu 
+         */
+        public Produkt(int id, String nazev, String popis, int uroven)
+        {
+            this.nazev = nazev;
+            this.popis = popis;
+            this.uroven = uroven;
+            this.id = id;
+            jedna = null;
+            dva = null;
+        }
+        
+
+        
 
     }
 }

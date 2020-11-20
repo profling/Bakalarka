@@ -72,11 +72,15 @@ namespace Bakalarka.logika
          */
         static public void NacteniProduktu()
         {
-           
-            foreach(var produkt in Hra.produkty)
+
+            foreach (var produkt in Hra.produkty)
             {
+                if (produkt.uroven == 1)
+                {
+                
                 Hra.mapa.Pins.Add(produkt.jedna);
                 Hra.mapa.Pins.Add(produkt.dva);
+                }
             }
         }
     }

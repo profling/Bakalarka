@@ -113,7 +113,7 @@ namespace Bakalarka.UX
             };
             var roh1 = new Label
             {
-                Text = "Roh 1:",
+                Text = "SZ roh:",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             };
@@ -137,7 +137,7 @@ namespace Bakalarka.UX
             };
             var roh2 = new Label
             {
-                Text = "Roh 2:",
+                Text = "SV roh:",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             };
@@ -161,7 +161,7 @@ namespace Bakalarka.UX
             };
             var roh3 = new Label
             {
-                Text = "Roh 3:",
+                Text = "JV roh:",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             };
@@ -185,7 +185,7 @@ namespace Bakalarka.UX
             };
             var roh4 = new Label
             {
-                Text = "Roh 4:",
+                Text = "JZ roh:",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center
             };
