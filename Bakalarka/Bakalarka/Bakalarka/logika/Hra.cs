@@ -7,6 +7,7 @@ using MySqlConnector;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bakalarka.logika
 {
@@ -159,15 +160,7 @@ namespace Bakalarka.logika
             if (data.HasRows)
             {
                 while (data.Read())
-                {/*
-                    roh1X = Double.Parse(data["roh1X"].ToString(),System.Globalization.CultureInfo.InvariantCulture);
-                    roh1Y = Double.Parse(data["roh1Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                    roh2X = Double.Parse(data["roh2X"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                    roh2Y = Double.Parse(data["roh2Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                    roh3X = Double.Parse(data["roh3X"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                    roh3Y = Double.Parse(data["roh3Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                    roh4X = Double.Parse(data["roh4X"].ToString(), System.Globalization.CultureInfo.InvariantCulture);
-                    roh4Y = Double.Parse(data["roh4Y"].ToString(), System.Globalization.CultureInfo.InvariantCulture);*/
+                {
                     roh1X = (double)data["roh1X"];
                     roh1Y = (double)data["roh1Y"];
                     roh2X = (double)data["roh2X"];
@@ -201,6 +194,7 @@ namespace Bakalarka.logika
                 //nacteni mapy 
                 MapaKontroler.NacteniProduktu();
                 MapaKontroler.HerniPole();
+                MapaKontroler.PoziceHrace();
                 //nacteni skladu
                 Sklad.NacteniSkladu();
                 //nacteni souboju 
@@ -243,57 +237,105 @@ namespace Bakalarka.logika
         /*
          * Vytvoreni polohy produktu
          */
-        static String polohaProduktu()
+        static void polohaProduktu()
         {
 
-            MySqlCommand prikazPole = new MySqlCommand("Select * from bakalarka.hra where idhra=@idhra;");
-            prikazPole.Parameters.AddWithValue("@idhra", idhry);
-            MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikazPole);
-            double roh1x=0, roh1y=0, roh2x=0, roh2y=0, roh3x=0, roh3y=0, roh4x=0, roh4y=0;
-            while (data.Read())
+            MySqlCommand prikazHra = new MySqlCommand("select * from bakalarka.hra;");
+            MySqlDataReader dataHra = DBConnector.ProvedeniPrikazuSelect(prikazHra);
+            double roh1x = 0, roh1y = 0, roh2x = 0, roh2y = 0, roh3x = 0, roh3y = 0, roh4x = 0, roh4y = 0;
+            while (dataHra.Read())
             {
-                roh1x = (double)data["roh1X"];
-                roh1y = (double)data["roh1Y"];
-                roh2x = (double)data["roh2X"];
-                roh2y = (double)data["roh2Y"];
-                roh3x = (double)data["roh3X"];
-                roh3y = (double)data["roh3Y"];
-                roh4x = (double)data["roh4X"];
-                roh4y = (double)data["roh4Y"];
+                roh1x = (double)dataHra["roh1X"];
+                roh1y = (double)dataHra["roh1Y"];
+                roh2x = (double)dataHra["roh2X"];
+                roh2y = (double)dataHra["roh2Y"];
+                roh3x = (double)dataHra["roh3X"];
+                roh3y = (double)dataHra["roh3Y"];
+                roh4x = (double)dataHra["roh4X"];
+                roh4y = (double)dataHra["roh4Y"];
+                Bod[] hraciPole = { new Bod(roh1x, roh1y), new Bod(roh2x, roh2y), new Bod(roh3x, roh3y), new Bod(roh4x, roh4y) };
+                MySqlCommand prikazProdukty = new MySqlCommand("Select idprodukt from bakalarka.produkt where uroven=1;");
+                MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikazProdukty);
+
+                double[] y = { roh1y, roh2y, roh3y, roh4y };
+                double yMin = y.Min();
+                double yMax = y.Max();
+                double[] x = { roh1x, roh2x, roh3x, roh4x };
+                double xMin = x.Min();
+                double xMax = x.Max();
+                while (data.Read())
+                {
+                    Boolean prvniSouradnice = true;
+                    Boolean druhaSouradnice = true;
+                    Bod prvni = new Bod();
+                    Bod druha = new Bod();
+                    while (prvniSouradnice) // dokud neni souradnice v polygonu
+                    {
+                        prvni.X = new Random().NextDouble() * (xMax - xMin) + xMin;
+                        prvni.Y = new Random().NextDouble() * (yMax - yMin) + yMin;
+                        if (BodVPolygonu(hraciPole, prvni)) prvniSouradnice = false;
+
+                    }
+                    while (druhaSouradnice) // dokud neni souradnice v polygonu
+                    {
+                        druha.X = new Random().NextDouble() * (xMax - xMin) + xMin;
+                        druha.Y = new Random().NextDouble() * (yMax - yMin) + yMin;
+                        if (BodVPolygonu(hraciPole, druha)) druhaSouradnice = false;
+
+                    }
+                    MySqlCommand prikazPoloha = new MySqlCommand("insert into bakalarka.polohaProduktu (x1,y1,x2,y2,idhra,idprodukt) values(@x1,@y1,@x2,@y2,@idhra,@idprodukt);");
+                    prikazPoloha.Parameters.AddWithValue("@x1", prvni.X);
+                    prikazPoloha.Parameters.AddWithValue("@y1", prvni.Y);
+                    prikazPoloha.Parameters.AddWithValue("@x2", druha.X);
+                    prikazPoloha.Parameters.AddWithValue("@y2", druha.Y);
+                    prikazPoloha.Parameters.AddWithValue("@idhra", (int)dataHra["idhra"]);
+                    prikazPoloha.Parameters.AddWithValue("@idprodukt", (int)data["idprodukt"]);
+                     DBConnector.ProvedeniPrikazuOstatni(prikazPoloha);
+                   
+                }
+
+            }
+        }
+        /*
+         * Aktualizace polohy produktu
+         */
+         public static async void AktualizacePolohy()
+        {
+            while (true)
+            {
+
+           
+                MySqlCommand prikaz = new MySqlCommand("Select *from bakalarka.polohaProduktu where idhra=@idhra;");
+                prikaz.Parameters.AddWithValue("@idhra", idhry);
+                MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikaz);
+                while (data.Read())
+                {
+                    Hra.produkty.Find(x => x.id == (int)data["idprodukt"]).jedna.Position = new Position((double)data["x1"], (double)data["y1"]);
+                    Hra.produkty.Find(x => x.id == (int)data["idprodukt"]).dva.Position = new Position((double)data["x2"], (double)data["y2"]);
+                }
+                await Task.Delay(1000*10);// brzda na 10 vterin, takze aktualizace prohne jednou za 10 vterin
             }
 
-            
-            MySqlCommand prikazProdukty = new MySqlCommand("Select idprodukt from bakalarka.produkt where uroven=1;");
-             data = DBConnector.ProvedeniPrikazuSelect(prikazProdukty);
-
-            double[] y = {roh1y,roh2y,roh3y,roh4y };
-            double yMin = y.Min();
-            double yMax = y.Max();
-            while (data.Read())
+        }
+        /*
+         * Overeni, ze se bod nachazi v polygonu
+         */
+        static bool BodVPolygonu(Bod[] polygon, Bod testPoint)
+        {
+            bool result = false;
+            int j = polygon.Count() - 1;
+            for (int i = 0; i < polygon.Count(); i++)
             {
-                int idprodukt = (int)data["idprodukt"];
-                double y1 = new Random().NextDouble() * (yMax - yMin) + yMin;
-                double y2 = new Random().NextDouble() * (yMax - yMin) + yMin;
-
-                double xMaxX1 = roh1x + (roh1x-roh2x)*((y1-roh1y)/(roh1y-roh2y)); // Ode dneska muzu tvrdit, ze jsem v zivote vyuzil znalosti parametricke rovnice krivky
-                double xMinX1 = roh4x + (roh4x - roh3x) * ((y1 - roh4y) / (roh4y - roh3y));
-                double x1 = new Random().NextDouble() * (xMaxX1 - xMinX1) + xMinX1;
-                double xMaxX2 = roh1x + (roh1x - roh2x) * ((y1 - roh1y) / (roh1y - roh2y)); // Ode dneska muzu tvrdit, ze jsem v zivote vyuzil znalosti parametricke rovnice krivky
-                double xMinX2 = roh4x + (roh4x - roh3x) * ((y1 - roh4y) / (roh4y - roh3y));
-                double x2 = new Random().NextDouble() * (xMaxX2 - xMinX2) + xMinX2;
-
-                MySqlCommand prikazPoloha = new MySqlCommand("INSERT INTO `bakalarka`.`polohaProduktu` ( `x1`, `y1`, `x2`, `y2`, `idhra`, `idprodukt`) VALUES(@x1,@y1,@x2,@y2,@idhra,@idprodukt );");
-                prikazPoloha.Parameters.AddWithValue("@x1", x1);
-                prikazPoloha.Parameters.AddWithValue("@y1", y1);
-                prikazPoloha.Parameters.AddWithValue("@x2", x2);
-                prikazPoloha.Parameters.AddWithValue("@y2", y2);
-                prikazPoloha.Parameters.AddWithValue("@idhra", idhry);
-                prikazPoloha.Parameters.AddWithValue("@idprodukt", idprodukt);
-                String prubeh = DBConnector.ProvedeniPrikazuOstatni(prikazPoloha);
-                Console.WriteLine("AAAA" + prubeh);
+                if (polygon[i].Y < testPoint.Y && polygon[j].Y >= testPoint.Y || polygon[j].Y < testPoint.Y && polygon[i].Y >= testPoint.Y)
+                {
+                    if (polygon[i].X + (testPoint.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) * (polygon[j].X - polygon[i].X) < testPoint.X)
+                    {
+                        result = !result;
+                    }
+                }
+                j = i;
             }
-             
-            return null;
+            return result;
         }
     }
 }

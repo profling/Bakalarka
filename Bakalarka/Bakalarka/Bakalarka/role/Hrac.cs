@@ -50,8 +50,18 @@ namespace Bakalarka.role
          */
         static public String Prihlaseni(int id, String heslo)
         {
-            Hra.stavZivotu = new Label() { };
-            Hra.invObsah = new Label() { };
+            Hra.stavZivotu = new Label() {
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 15,
+                TextColor = Color.Black
+            };
+            Hra.invObsah = new Label() {
+                HorizontalOptions = LayoutOptions.StartAndExpand,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 15,
+                TextColor = Color.Black
+            };
             MySqlCommand prikaz = new MySqlCommand("SELECT * FROM bakalarka.uzivatel WHERE heslo=@heslo and iduzivatel=@id; ");
             prikaz.Parameters.AddWithValue("@heslo", heslo);
             prikaz.Parameters.AddWithValue("@id", id);
@@ -79,8 +89,8 @@ namespace Bakalarka.role
                         prikazNacteniHry.Parameters.AddWithValue("@idtym", tym);
                         MySqlDataReader dataNacteni = DBConnector.ProvedeniPrikazuSelect(prikazNacteniHry);
                         dataNacteni.Read();
-                        Hra.nacteniHry((int)dataNacteni["hra"]); // mozna tady bude potraba idhry
-
+                        Hra.nacteniHry((int)dataNacteni["hra"]); 
+                        Hra.AktualizacePolohy();
                         if (!Convert.IsDBNull(data["inventar"]))
                         {
                             inventarNazev = Hra.produkty.Find(x => x.id == (int)data["inventar"]).nazev;
@@ -168,6 +178,31 @@ namespace Bakalarka.role
                 return "Zadaný kód je špatný";
             }
             
+        }
+        
+        /*
+         * aktualizace inventare a zivota hrace
+         */
+        static public void AktualizaceZivotInventar()
+        {
+            MySqlCommand prikaz = new MySqlCommand("Select inventar,zivot from bakalarka.uzivatel where iduzivatel=@iduzivatel;");
+            prikaz.Parameters.AddWithValue("@iduzivatel", iduzivatel);
+            MySqlDataReader data = DBConnector.ProvedeniPrikazuSelect(prikaz);
+            data.Read();
+            if (Convert.IsDBNull(data["inventar"]))
+            {
+                inventarNazev = "";
+                inventar = 0;
+            }
+            else
+            {
+                inventarNazev = Hra.produkty.Find(x => x.id == (int)data["inventar"]).nazev;
+                inventar = (int)data["inventar"];
+            }
+           
+            
+            zivot = (int)data["zivot"];
+            data.Close();
         }
     }
 

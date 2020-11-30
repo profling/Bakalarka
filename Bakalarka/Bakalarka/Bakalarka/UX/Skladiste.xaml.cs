@@ -23,6 +23,7 @@ namespace Bakalarka.UX
             };
 
             Scroll.Content = Hra.skladiste;
+            
             Content = Scroll;
 
         }

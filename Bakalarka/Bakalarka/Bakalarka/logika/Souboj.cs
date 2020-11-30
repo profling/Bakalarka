@@ -108,7 +108,9 @@ namespace Bakalarka.logika
             {
                 if (vysledek.Text == reseni)
                 {
+                    hotovo.IsEnabled = false;
                     await Vyhodnoceni();
+                    
                 }
                
             };
@@ -266,6 +268,7 @@ namespace Bakalarka.logika
             Grid.SetRow(zpet, 2);
             Grid.SetColumn(zpet, 0);
             Hra.bojiste.Children.Add(zpet);
+            Hrac.AktualizaceZivotInventar();
             zpet.Clicked += async (sender, args) =>
              {
                  Bojiste.BojisteUvod();
@@ -304,8 +307,10 @@ namespace Bakalarka.logika
             Grid.SetRow(zpet, 2);
             Grid.SetColumn(zpet, 0);
             Hra.bojiste.Children.Add(zpet);
+            Hrac.AktualizaceZivotInventar();
             zpet.Clicked += async (sender, args) =>
             {
+
                 Bojiste.BojisteUvod();
             };
         }
@@ -325,6 +330,7 @@ namespace Bakalarka.logika
             Grid.SetRow(zpet, 2);
             Grid.SetColumn(zpet, 0);
             Hra.bojiste.Children.Add(zpet);
+            Hrac.AktualizaceZivotInventar();
             zpet.Clicked += async (sender, args) =>
             {
                 Bojiste.BojisteUvod();

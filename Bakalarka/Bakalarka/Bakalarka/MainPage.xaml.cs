@@ -28,5 +28,9 @@ namespace Bakalarka
             InitializeComponent();
             
         }
+       public Souboj GetSouboj()
+        {
+            return souboj;
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace Bakalarka.logika
             jedna.MarkerClicked += async (s, args) =>
             {
                 Hra.vybranyProdukt = id;
-                Hra.produktPopis.Text = nazev;
+                Hra.produktPopis.Text = popis;
             };
             dva = new Pin
             {
@@ -55,7 +55,7 @@ namespace Bakalarka.logika
             dva.MarkerClicked += async (s, args) =>
             {
                 Hra.vybranyProdukt = id;
-                Hra.produktPopis.Text = nazev;
+                Hra.produktPopis.Text = popis;
 
             };
         }

@@ -43,13 +43,17 @@ namespace Bakalarka.UX
             grid.Children.Add(Hra.mapa);
 
   
-            Hra.produktPopis = new Label { Text="blup"};
-            sebrat = new Button { Text="sebrat" };
+            Hra.produktPopis = new Label {FontSize=25,
+                TextColor=Color.Black,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+            };
+            sebrat = new Button { Text="Sebrat", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 20, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
             Grid.SetRow(Hra.produktPopis, 4);
             Grid.SetRow(sebrat, 5);
             grid.Children.Add(Hra.produktPopis);
             grid.Children.Add(sebrat);
-            Task.Delay(2000);
+            
             MapaKontroler.PoziceHrace();
 
            
@@ -58,8 +62,16 @@ namespace Bakalarka.UX
              {
                  if (Hrac.prihlaseny)
                  {
-                    Hra.produktPopis.Text= Hrac.VlozeniDoInventare(Hra.vybranyProdukt);
+                    String prubeh= Hrac.VlozeniDoInventare(Hra.vybranyProdukt);
+                     if (prubeh != null)
+                     {
+                         await DisplayAlert("Info", "Při sebrání se něco nepovedlo. Nejspíše už máš plný inventář.", "Zavřít");
+                     }
 
+                 }
+                 else
+                 {
+                     await DisplayAlert("Chyba", "Musíš se nejdřív přihlásit nebo načíst hru!", "Zavřít");
                  }
                      
              };

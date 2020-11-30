@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Xamarin.Forms;
+using Xamarin.Essentials;
+using System.Linq;
 
 namespace Bakalarka.logika
 {
@@ -21,7 +23,14 @@ namespace Bakalarka.logika
 
             {
                 Button novySouboj = new Button {
-                Text="Nový souboj"};
+                Text="Nový souboj",
+                    BackgroundColor = Color.RoyalBlue,
+                    TextColor = Color.DarkGray,
+                    FontSize = 15,
+                    CornerRadius = 4,
+                    BorderColor = Color.DarkGray,
+                    BorderWidth = 2
+                };
                 Grid.SetColumnSpan(novySouboj, 3);
                 Grid.SetColumn(novySouboj, 0);
                 Grid.SetRow(novySouboj, 1);
@@ -34,11 +43,8 @@ namespace Bakalarka.logika
                      }
                      else
                      {
-                         var info = new Label() { Text = "Jsi nesmrtelny nebo mrtvy. Za takoveho stavu nemuzes bojovat." };
-                         Grid.SetColumnSpan(info, 3);
-                         Grid.SetColumn(info, 0);
-                         Grid.SetRow(info, 2);
-                         Hra.bojiste.Children.Add(info);
+                         
+                         await Application.Current.MainPage.DisplayAlert("Chyba", "Nemůžeš vyvovalat souboj, jelikož jsi bud mrtvý nebo nesmrtelný!", "Zavřít");
                      }
                  };
             }// vyvolani souboje
@@ -49,7 +55,13 @@ namespace Bakalarka.logika
 
                 Button prijmoutSouboj = new Button
                 {
-                    Text = "Přijmout souboj"
+                    Text = "Přijmout souboj",
+                    BackgroundColor = Color.RoyalBlue,
+                    TextColor = Color.DarkGray,
+                    FontSize = 15,
+                    CornerRadius = 4,
+                    BorderColor = Color.DarkGray,
+                    BorderWidth = 2
                 };
                 Grid.SetColumnSpan(prijmoutSouboj, 3);
                 Grid.SetColumn(prijmoutSouboj, 0);
@@ -63,11 +75,7 @@ namespace Bakalarka.logika
                     }
                     else
                     {
-                        var info = new Label() { Text = "Jsi nesmrtelny nebo mrtvy. Za takoveho stavu nemuzes bojovat." };
-                        Grid.SetColumnSpan(info, 3);
-                        Grid.SetColumn(info, 0);
-                        Grid.SetRow(info, 2);
-                        Hra.bojiste.Children.Add(info);
+                        await Application.Current.MainPage.DisplayAlert("Chyba", "Nemůžeš přijmout souboj, jelikož jsi bud mrtvý nebo nesmrtelný!", "Zavřít");
                     }
 
                 };
@@ -75,7 +83,15 @@ namespace Bakalarka.logika
 
             if (Hrac.role == 3) // oziveni
             {
-                var oziveni = new Button() { Text = "Kód pro oživení" };
+                var oziveni = new Button() {
+                    Text = "Kód pro oživení",
+                    BackgroundColor = Color.RoyalBlue,
+                    TextColor = Color.DarkGray,
+                    FontSize = 15,
+                    CornerRadius = 4,
+                    BorderColor = Color.DarkGray,
+                    BorderWidth = 2
+                };
                 Grid.SetColumnSpan(oziveni, 3);
                 Grid.SetRow(oziveni, 2);
                 Grid.SetColumn(oziveni, 0);
@@ -112,12 +128,12 @@ namespace Bakalarka.logika
                 Grid.SetColumn(idHry, 0);
                 Grid.SetRow(idHry, 1);
                 Hra.bojiste.Children.Add(idHry);
-                Button start = new Button { Text = "Start" };
+                Button start = new Button { Text = "Start", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
                 Grid.SetColumnSpan(start, 3);
                 Grid.SetColumn(start, 0);
                 Grid.SetRow(start, 2);
                 Hra.bojiste.Children.Add(start);
-                Button zpet = new Button { Text = "Zpět" };
+                Button zpet = new Button { Text = "Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
                 Grid.SetColumnSpan(zpet, 3);
                 Grid.SetColumn(zpet, 0);
                 Grid.SetRow(zpet, 3);
@@ -130,15 +146,11 @@ namespace Bakalarka.logika
                     data.Read();
                     if (!Convert.IsDBNull(data["uzivatel2"]))//zjisteni jestli je protivnik pripraven do boje
                     {
-                        Souboj boj = new Souboj(1 ,idSouboje,1);//pro TEST posilame jednicku pak zmenit na typSouoboje
+                        Souboj boj = new Souboj(typSouboje, idSouboje, 1);//pro TEST posilame jednicku pak zmenit na typSouoboje
                     }
                     else
                     {
-                        var info = new Label() { Text = "Soupeř neni ještě připraven" };
-                        Grid.SetColumnSpan(info, 3);
-                        Grid.SetColumn(info, 0);
-                        Grid.SetRow(info, 4);
-                        Hra.bojiste.Children.Add(info);
+                        await Application.Current.MainPage.DisplayAlert("Chyba", "Soupeř ještě není připraven.", "Zavřít");
 
                     }
                    
@@ -152,7 +164,7 @@ namespace Bakalarka.logika
             else
             {
                 BojisteUvod();
-                return "neco se se pokazilo pri vyvolani souboje";
+                
             }
             return null;
         }
@@ -164,8 +176,8 @@ namespace Bakalarka.logika
             Hra.bojiste.Children.Clear();
             var kodlbl = new Label { Text = "Kód souboje:" };
             var kod = new Entry { Keyboard = Keyboard.Numeric };
-            var potvrdit = new Button { Text = "Potvrdit" };
-            var zpet = new Button { Text = "Zpět" };
+            var potvrdit = new Button { Text = "Potvrdit", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
+            var zpet = new Button { Text = "Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
             Hra.bojiste.Children.Add(kodlbl, 0, 1);
             Hra.bojiste.Children.Add(kod, 1, 1);
             Grid.SetColumnSpan(potvrdit, 3);
@@ -198,27 +210,23 @@ namespace Bakalarka.logika
                          Grid.SetColumn(lbl, 0);
                          Grid.SetRow(lbl, 1);
                          Hra.bojiste.Children.Add(lbl);
-                         var start = new Button() { Text = "Start" };
+                         var start = new Button() { Text = "Start", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
                          Grid.SetColumnSpan(start, 3);
                          Grid.SetColumn(start, 0);
                          Grid.SetRow(start, 2);
                          Hra.bojiste.Children.Add(start);
                          start.Clicked += async (sender1, args1) =>
                           {
-                              Souboj boj = new Souboj(2, (int)data["idsouboj"], 2);// do booojeeee pro test typ souboje 2
+                              Souboj boj = new Souboj((int)data["idtyp_souboje"], (int)data["idsouboj"], 2);// do booojeeee pro test typ souboje 2
                       };
 
 
                      }
                      else
                      {
-                         var info = new Label { Text = "Zadaný kód je špatný!" };
-                         Grid.SetColumnSpan(info, 3);
-                         Grid.SetColumn(info, 0);
-                         Grid.SetRow(info, 4);
-                         Hra.bojiste.Children.Add(info);
+                     await Application.Current.MainPage.DisplayAlert("Chyba", "Zadaný kód je špatný!", "Zavřít");
 
-                     }
+                 }
                  
              };
 
@@ -240,7 +248,7 @@ namespace Bakalarka.logika
             Grid.SetRow(kodlbl, 1);
             Grid.SetColumn(kodlbl, 0);
             Hra.bojiste.Children.Add(kodlbl);
-            var zpet = new Button() {Text="Zpět" };
+            var zpet = new Button() {Text="Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
             Grid.SetColumnSpan(zpet, 3);
             Grid.SetColumn(zpet, 0);
             Grid.SetRow(zpet, 2);

@@ -13,6 +13,7 @@ namespace Bakalarka.logika
         public String prisada1;
         public String prisada2;
         public String prisada3;
+        public String popis;
         public int mnozstvi1, mnozstvi2,mnozstvi3;
         int id1, id2, id3;
 
@@ -27,6 +28,7 @@ namespace Bakalarka.logika
             {
                 data.Read();    
                 this.vysledek = vysledek;
+                popis = Hra.produkty.Find(item => item.id == vysledek).popis;
                 prisada1 = Hra.produkty.Find(item => item.id == (int)data["prisada1"]).nazev;
                 mnozstvi1 = (int)data["mnozstvi1"];
                 id1 = (int)data["prisada1"];

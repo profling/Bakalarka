@@ -13,20 +13,20 @@ namespace Bakalarka.logika
     static class MapaKontroler
     {
         /*
-         * zobrazeni pozice hraace
+         * zobrazeni mapu tam kde se hrac nachazi
          */
         static public async void PoziceHrace()
         {
             try
             {
-                var location = await Geolocation.GetLastKnownLocationAsync();
+                var lokace = await Geolocation.GetLastKnownLocationAsync();
 
-                if (location != null)
+                if (lokace != null)
                 {
-                    Position p = new Position(location.Latitude, location.Longitude);
-                    MapSpan mapSapn = MapSpan.FromCenterAndRadius(p, Distance.FromKilometers(.444));
+                    Position pozice = new Position(lokace.Latitude, lokace.Longitude);
+                    MapSpan mapSapn = MapSpan.FromCenterAndRadius(pozice, Distance.FromKilometers(.444));
                     Hra.mapa.MoveToRegion(mapSapn);
-                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
+                    Console.WriteLine($"Latitude: {lokace.Latitude}, Longitude: {lokace.Longitude}, Altitude: {lokace.Altitude}");
                 }
             }
             catch (FeatureNotSupportedException fnsEx)
@@ -51,6 +51,7 @@ namespace Bakalarka.logika
          */
         static public void HerniPole()
         {
+            Hra.mapa.MapElements.Clear();
             Polygon pole = new Polygon
             {
                 StrokeWidth = 8,
@@ -72,7 +73,7 @@ namespace Bakalarka.logika
          */
         static public void NacteniProduktu()
         {
-
+            Hra.mapa.Pins.Clear();
             foreach (var produkt in Hra.produkty)
             {
                 if (produkt.uroven == 1)

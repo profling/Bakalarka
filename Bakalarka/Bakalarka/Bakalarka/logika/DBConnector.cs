@@ -25,8 +25,7 @@ namespace Bakalarka.logika
        static public MySqlDataReader ProvedeniPrikazuSelect(MySqlCommand prikaz)
         {
             try
-            {
-                
+            {                
                 MySqlConnection pripojeni = new MySqlConnection(builder.ConnectionString);
                 pripojeni.Open();
                 prikaz.Connection = pripojeni;
@@ -39,7 +38,6 @@ namespace Bakalarka.logika
                 {
                     return null;
                 }
-
             }
             catch (MySqlException e)
             {

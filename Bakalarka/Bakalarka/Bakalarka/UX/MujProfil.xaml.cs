@@ -21,15 +21,12 @@ namespace Bakalarka.UX
         {
             InitializeComponent();
             var layout = new StackLayout { Padding = new Thickness(5, 10) };
-            var id = new Entry { Keyboard = Keyboard.Numeric };
-            var heslo = new Entry { IsPassword= true, Keyboard = Keyboard.Numeric };
-            var prihlasit = new Button { Text = "Prihlasit se" };
-            var label = new Label { Text = "" };
+            var id = new Entry { Keyboard = Keyboard.Numeric,  };
+            var heslo = new Entry { IsPassword= true, Keyboard = Keyboard.Numeric, MaxLength=5};         
             layout.Children.Add(id);
             layout.Children.Add(heslo);
-            layout.Children.Add(prihlasit);
-            layout.Children.Add(label);
-
+            var prihlasit = new Button { Text = "Přihlásit se", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize=15,CornerRadius=4,BorderColor=Color.DarkGray, BorderWidth=2  };
+            layout.Children.Add(prihlasit);      
             prihlasit.Clicked += async (sender, args) => {
                 if (Hrac.Prihlaseni(Convert.ToInt32(id.Text), heslo.Text) == null)
                 {
@@ -56,19 +53,17 @@ namespace Bakalarka.UX
                     Content = mujprofil;
                     if (Hrac.role == 0)
                     {
-                        MujProfilVedouci();
-                       
+                        MujProfilVedouci();                      
                     }
                     else
                     {
-                        MujProfilHrac();
-                        
+                        MujProfilHrac();                       
                     }
 
                 }
                 else
                 {
-                    label.Text="Spatne prihlasovaci udaje";
+                    await DisplayAlert("Chyba", "Špatné přihlašovací údaje!", "Zavřít");
                 }
                
             };
@@ -82,11 +77,14 @@ namespace Bakalarka.UX
           
             mujprofil.Children.Clear();
             
-            var nazev = new Label() { Text = "název" };
+            var nazev = new Label() { Text = "Název",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+            };
             var entryNazev = new Entry();
             var pocetTymu = new Label
             {
-                Text = "Pocet tymu:",
+                Text = "Počet tymu:",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
             };
@@ -211,12 +209,66 @@ namespace Bakalarka.UX
             {
                 Text = "Založit hru",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.RoyalBlue,
+                TextColor = Color.DarkGray,
+                CornerRadius = 4,
+                BorderColor = Color.DarkGray,
+                BorderWidth = 2
             };
-            var zpet = new Button() { Text="zpět" };
-            
+            var zpet = new Button() { Text="Zpět",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.DarkGray,
+                TextColor = Color.RoyalBlue,
+                CornerRadius = 4,
+                BorderColor = Color.RoyalBlue,
+                BorderWidth = 2
+            };
 
-
+            //validaceeee
+            {
+                roh1X.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh1Y.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh2X.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh2Y.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh3X.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh3Y.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh4X.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                roh4Y.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeDouble((Entry)sender, args);
+                };
+                entryPocetClenu.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeInt((Entry)sender, args);
+                };
+                entryPocetTymu.TextChanged += async (sender, args) =>
+                {
+                    Validace.PouzeInt((Entry)sender, args);
+                };
+            }
             //umisteni prvku
             {
 
@@ -326,13 +378,11 @@ namespace Bakalarka.UX
             }
             zalozit.Clicked += async (sender, args) =>
             {
+
                 String prubeh =  Hra.novaHra(roh1X.Text,roh1Y.Text, roh2X.Text, roh2Y.Text, roh3X.Text, roh3Y.Text, roh4X.Text, roh4Y.Text, Hrac.iduzivatel, Convert.ToInt32(entryPocetTymu.Text), Convert.ToInt32(entryPocetClenu.Text), entryNazev.Text);
                 if (prubeh != null)
                 {
-                    var layout = new StackLayout { Padding = new Thickness(5, 10) };
-                    Label chyba = new Label { Text = prubeh };
-                    layout.Children.Add(chyba);
-                    Content = layout;
+                    await DisplayAlert("Chyba", "Něco je zadáno špatně!", "Zavřít");
                 }
                 else
                 {
@@ -352,29 +402,39 @@ namespace Bakalarka.UX
         {
 
             mujprofil.Children.Clear();
-            var inv = new Label() { Text="Invenář:" };
+            var inv = new Label() { Text = "Inventář:",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 15,
+                TextColor = Color.Black
+            };
             Grid.SetColumnSpan(inv, 2);
             Grid.SetRow(inv, 1);
             Grid.SetColumn(inv, 0);
             mujprofil.Children.Add(inv);
             Grid.SetRow(Hra.invObsah, 1);
-            Grid.SetColumn(Hra.invObsah, 3);
+            Grid.SetColumn(Hra.invObsah, 2);
             mujprofil.Children.Add(Hra.invObsah);
-            var ziv = new Label() { Text = "Stav života:" };
+            var ziv = new Label() { Text = "Stav života:",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                FontSize = 15,
+                TextColor = Color.Black
+            };
             Grid.SetColumnSpan(ziv, 2);
             Grid.SetColumn(ziv, 0);
             Grid.SetRow(ziv, 2);
             mujprofil.Children.Add(ziv);           
             Grid.SetRow(Hra.stavZivotu, 2);
-            Grid.SetColumn(Hra.stavZivotu, 3);
+            Grid.SetColumn(Hra.stavZivotu,2);
             mujprofil.Children.Add(Hra.stavZivotu);
             Content = mujprofil;
-            var ozivit = new Button() { Text="Oživit se" };
+            var ozivit = new Button() { Text="Oživit se", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
             Grid.SetColumnSpan(ozivit, 4);
             Grid.SetColumn(ozivit, 0);
             Grid.SetRow(ozivit, 3);
             mujprofil.Children.Add(ozivit);
-            var statistiky = new Button() { Text= "Statistiky" };
+            var statistiky = new Button() { Text= "Statistiky", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
             Grid.SetColumnSpan(statistiky, 4);
             Grid.SetColumn(statistiky, 0);
             Grid.SetRow(statistiky, 4);
@@ -386,6 +446,10 @@ namespace Bakalarka.UX
                  if (Hrac.zivot == 2)
                  {
                      OziveniVzhled();
+                 }
+                 else
+                 {
+                     await DisplayAlert("Chyba","Jsi živý nebo nesmrtelný neni třeba se oživovat!","Zavřít");
                  }
                  
              };
@@ -402,7 +466,15 @@ namespace Bakalarka.UX
         public void MujProfilVedouci()
         {
             mujprofil.Children.Clear();
-            var zalozit = new Button() { Text = "Založit novou hru" };
+            var zalozit = new Button() { Text = "Založit novou hru",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.RoyalBlue,
+                TextColor = Color.DarkGray,
+                CornerRadius = 4,
+                BorderColor = Color.DarkGray,
+                BorderWidth = 2
+            };
             Grid.SetColumnSpan(zalozit, 3);
             Grid.SetRow(zalozit, 1);
             Grid.SetColumn(zalozit, 0);
@@ -411,7 +483,15 @@ namespace Bakalarka.UX
              {
                  ZalozitHru();
              };
-            var nacistHru = new Button() { Text = "Načíst hru" };
+            var nacistHru = new Button() { Text = "Načíst hru",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.RoyalBlue,
+                TextColor = Color.DarkGray,
+                CornerRadius = 4,
+                BorderColor = Color.DarkGray,
+                BorderWidth = 2
+            };
             Grid.SetColumnSpan(nacistHru, 3);
             Grid.SetRow(nacistHru, 2);
             Grid.SetColumn(nacistHru, 0);
@@ -420,7 +500,15 @@ namespace Bakalarka.UX
             {
                 NacistHruVzhled();
             };
-            var hraci = new Button() { Text = "Výpis hráču" };
+            var hraci = new Button() { Text = "Výpis hráču",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.RoyalBlue,
+                TextColor = Color.DarkGray,
+                CornerRadius = 4,
+                BorderColor = Color.DarkGray,
+                BorderWidth = 2
+            };
             Grid.SetColumnSpan(hraci, 3);
             Grid.SetRow(hraci, 3);
             Grid.SetColumn(hraci, 0);
@@ -437,7 +525,7 @@ namespace Bakalarka.UX
          void OziveniVzhled()
         {
             mujprofil.Children.Clear();
-            var kodlbl = new Label() { Text = "kód:" };
+            var kodlbl = new Label() { Text = "Kód:" };
             Grid.SetRow(kodlbl, 1);
             Grid.SetColumn(kodlbl, 0);
             mujprofil.Children.Add(kodlbl);
@@ -446,7 +534,7 @@ namespace Bakalarka.UX
             Grid.SetRow(kod, 1);
             Grid.SetColumn(kod, 1);
             mujprofil.Children.Add(kod);
-            var ozivit = new Button() { Text = "Oživit" };
+            var ozivit = new Button() { Text = "Oživit", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
             Grid.SetColumnSpan(ozivit, 3);
             Grid.SetRow(ozivit, 2);
             Grid.SetColumn(ozivit, 0);
@@ -460,15 +548,11 @@ namespace Bakalarka.UX
                  }
                  else
                  {
-                     var lbl = new Label() { Text = prubeh };
-                     Grid.SetColumnSpan(lbl, 3);
-                     Grid.SetRow(lbl, 4);
-                     Grid.SetColumn(lbl, 0);
-                     mujprofil.Children.Add(lbl);
+                     await DisplayAlert("Chyba", prubeh, "Zavřít");
                  }
 
              };
-            var zpet = new Button() { Text = "zpět" };
+            var zpet = new Button() { Text = "Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
             Grid.SetColumnSpan(zpet, 3);
             Grid.SetRow(zpet, 3);
             Grid.SetColumn(zpet, 0);
@@ -504,7 +588,7 @@ namespace Bakalarka.UX
             Grid.SetRow(lblproduktu, 2);
             Grid.SetColumn(lblproduktu, 0);
             mujprofil.Children.Add(lblproduktu);
-            var zpet = new Button() { Text = "zpět" };
+            var zpet = new Button() { Text = "Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
             Grid.SetColumnSpan(zpet, 3);
             Grid.SetRow(zpet, 3);
             Grid.SetColumn(zpet, 0);
@@ -540,17 +624,26 @@ namespace Bakalarka.UX
             mujprofil.Children.Add(seznamBox);
             var nazevlbl = new Label { Text = "název:" };
             mujprofil.Children.Add(nazevlbl, 0, 1);
-            var nacist = new Button() { Text = "načíst hru" };
+            var nacist = new Button() { Text = "Načíst hru", BackgroundColor = Color.RoyalBlue, TextColor = Color.DarkGray, FontSize = 15, CornerRadius = 4, BorderColor = Color.DarkGray, BorderWidth = 2 };
             Grid.SetColumnSpan(nacist, 3);
             Grid.SetRow(nacist, 2);
             Grid.SetColumn(nacist, 0);
             mujprofil.Children.Add(nacist);
             nacist.Clicked+= async (sender, args)=>{
-                Hra.idHry(seznamBox.Items[seznamBox.SelectedIndex]);
-                Hra.nacteniHry(Hra.idhry);
-                MujProfilVedouci();
+                if (seznamBox.SelectedIndex==-1)
+                {
+                    await DisplayAlert("Chyba", "Musí být vybrán název hry!", "Zavřít");
+                }
+                else
+                {
+                    Hra.idHry(seznamBox.Items[seznamBox.SelectedIndex]);
+                    Hra.nacteniHry(Hra.idhry);
+                    Hra.AktualizacePolohy();
+                    MujProfilVedouci();
+                }
+               
             };
-            var zpet = new Button() { Text = "zpět" };
+            var zpet = new Button() { Text = "Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
             Grid.SetColumnSpan(zpet, 3);
             Grid.SetRow(zpet, 3);
             Grid.SetColumn(zpet, 0);
@@ -604,7 +697,7 @@ namespace Bakalarka.UX
                 mujprofil.Children.Add(tymh, 3, radek);
                 radek++;
             }
-            var zpet = new Button() { Text = "zpět" };
+            var zpet = new Button() { Text = "Zpět", BackgroundColor = Color.DarkGray, TextColor = Color.RoyalBlue, FontSize = 15, CornerRadius = 4, BorderColor = Color.RoyalBlue, BorderWidth = 2 };
             Grid.SetColumnSpan(zpet, 4);
             Grid.SetRow(zpet, radek);
             Grid.SetColumn(zpet, 0);
