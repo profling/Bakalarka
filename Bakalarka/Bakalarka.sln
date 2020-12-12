@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bakalarka.Android", "Bakala
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bakalarka.iOS", "Bakalarka\Bakalarka.iOS\Bakalarka.iOS.csproj", "{126D8555-F7CA-4B74-8B72-025E51EBFEF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bakalarka", "Bakalarka\Bakalarka\Bakalarka.csproj", "{F7FC218C-91C6-4190-B5B1-5C2116D3EAAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bakalarka", "Bakalarka\Bakalarka\Bakalarka.csproj", "{F7FC218C-91C6-4190-B5B1-5C2116D3EAAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,36 +6,26 @@ using MySqlConnector;
 
 namespace Bakalarka.logika
 {
-    class DBConnector
+   static class DBConnector
     {
       
-        MySqlConnectionStringBuilder builder;
+       static MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder("Server=34.107.13.57;User ID=app;Password=lov3MaxiKing;Database=bakalarka");
         
-       
-
-        public DBConnector()
-        {
-            builder = new MySqlConnectionStringBuilder();
-            builder.Server = "34.107.13.57";
-            builder.Database = "bakalarka";
-            builder.UserID = "app";
-            builder.Password = "lov3MaxiKing";
             /*builder.SslCert = @"Bakalarka.client-cert.pem";
             builder.SslKey = @"Bakalarka.client-key.pem";
             builder.SslCa = @"Bakalarka.server-ca.pem";
             builder.SslMode = MySqlSslMode.VerifyFull;*/
-        }
+        
    
             
         /**
-         * Provedeni prikazu update, delete, insert. Pokud probehne v poradku vrati data jinak vrati null
+         * Provedeni prikazu Select. Pokud probehne v poradku vrati data jinak vrati null
          */
         
-        public MySqlDataReader ProvedeniPrikazuSelect(MySqlCommand prikaz)
+       static public MySqlDataReader ProvedeniPrikazuSelect(MySqlCommand prikaz)
         {
             try
-            {
-                
+            {                
                 MySqlConnection pripojeni = new MySqlConnection(builder.ConnectionString);
                 pripojeni.Open();
                 prikaz.Connection = pripojeni;
@@ -48,7 +38,6 @@ namespace Bakalarka.logika
                 {
                     return null;
                 }
-
             }
             catch (MySqlException e)
             {
@@ -58,7 +47,7 @@ namespace Bakalarka.logika
         /**
          * Provedeni prikazu update, delete, insert. Pokud probehne v poradku vrati null jinak vrati chybovou hlasku
          */
-        public String ProvedeniPrikazuOstatni( MySqlCommand prikaz)
+       static public String ProvedeniPrikazuOstatni( MySqlCommand prikaz)
         {
             try
             {

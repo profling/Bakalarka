@@ -21,9 +21,9 @@ namespace Bakalarka.UX
             var layout = new StackLayout { Padding = new Thickness(5, 10) };
             Label label1 = new Label();
 
-            DBConnector databaze = new DBConnector();
+           
             var prikaz= new MySqlCommand("select;");
-            String test = databaze.ProvedeniPrikazuOstatni(prikaz);
+            String test = DBConnector.ProvedeniPrikazuOstatni(prikaz);
 
             label1.Text = test;
             label1.IsVisible = true;

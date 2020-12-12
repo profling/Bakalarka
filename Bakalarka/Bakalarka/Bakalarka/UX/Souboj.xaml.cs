@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bakalarka.logika;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,25 @@ namespace Bakalarka.UX
         public Souboj()
         {
             InitializeComponent();
+            Hra.bojiste = new Grid
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition(),
+                    new RowDefinition()
+
+                },
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition(),
+                    new ColumnDefinition()
+                }
+            };
+              
+            Content = Hra.bojiste;
         }
     }
 }

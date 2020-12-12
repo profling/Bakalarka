@@ -10,7 +10,7 @@ namespace Bakalarka
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new MainPage() {BarBackgroundColor=Color.RoyalBlue,SelectedTabColor=Color.SkyBlue, };
         }
 
         protected override void OnStart()

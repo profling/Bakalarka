@@ -41,5 +41,6 @@
   <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
   <string>Can we use your location at all times?</string>
 
+
 </dict>
 </plist>
